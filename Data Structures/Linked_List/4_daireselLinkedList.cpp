@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct n {
+    int data;
+    struct n* next;
+};
+typedef struct n node;
+
+void printList(node * head){
+    int i = 0;
+    node * itter = head;
+    printf("%d'st lists data: %d \n", i+1, itter -> data);
+    i++;
+    while(itter != head){
+        printf("%d'st lists data: %d \n", i+1, itter->data);
+        i++;
+        itter = itter->next;
+    }
+}
+
+void addToList(node * r, int i){
+    node * itter = r;
+    
+    while (itter->next != r){
+        itter = itter->next;
+    }
+    itter->next = (node *) malloc(sizeof(node));
+    itter ->next ->data = i;
+    itter ->next ->next = r;
+}
+node * ekleSirali(node * r, int x){
+    if (r == NULL){ // Linked listte henüz bir node yoksa
+        r = (node *) malloc(sizeof(node));
+        r ->data = x;
+        r ->next = r;
+        return r;
+    }
+    if(r->data > x){ // linked listin başına bir ekleme yapılıp root değişitirilecekse
+        node * temp;
+        temp = (node *) malloc(sizeof(node));
+        temp -> data = x;
+        node * itter = r;
+        while (itter->next != r){
+        itter = itter->next;
+        }
+        itter -> next = temp;
+        temp -> next = r;
+        return temp;
+    }
+    // Ortaya veya sona bir ekleme yapılacaksa
+    node * itter = r;
+    while (itter -> next != r && itter -> next -> data < x){
+        itter = itter -> next;
+    }
+    
+    node * temp = (node *) malloc(sizeof(node));
+    temp -> data = x;
+    temp -> next = itter -> next;
+    itter -> next = temp;
+    return r;
+    
+}
+
+int main(){
+    node * root;
+    root = NULL;
+    root = ekleSirali(root, 50);
+    root = ekleSirali(root, 10);
+    root = ekleSirali(root, 20);
+    root = ekleSirali(root, 30);
+    root = ekleSirali(root, 40);
+    root = ekleSirali(root, 60);
+    root = ekleSirali(root, 0);
+
+    printList(root);
+    return 0;
+}
